@@ -735,7 +735,7 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
                         path: data["fullpath"],
                         type: "asset",
                         subtype: data["type"]
-                    }))
+                    }));
                     this.requestNicePathData(toBeRequested);
                 }
             } catch (e) {
