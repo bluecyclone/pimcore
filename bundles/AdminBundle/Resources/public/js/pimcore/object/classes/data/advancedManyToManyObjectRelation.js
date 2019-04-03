@@ -189,6 +189,13 @@ pimcore.object.classes.data.advancedManyToManyObjectRelation = Class.create(pimc
             value: this.datax.enableBatchEdit
         });
 
+        this.specificPanel.add({
+            xtype: "checkbox",
+            fieldLabel: t("allow_multiple_assignments"),
+            name: "allowMultipleAssignments",
+            value: this.datax.allowMultipleAssignments
+        });
+
         return this.layout;
     },
 

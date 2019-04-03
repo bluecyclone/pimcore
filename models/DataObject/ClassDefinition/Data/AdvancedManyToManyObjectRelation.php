@@ -60,6 +60,11 @@ class AdvancedManyToManyObjectRelation extends ManyToManyObjectRelation
     public $enableBatchEdit;
 
     /**
+     * @var bool
+     */
+    public $allowMultipleAssignments;
+
+    /**
      * @inheritdoc
      */
     public function prepareDataForPersistence($data, $object = null, $params = [])
@@ -100,7 +105,8 @@ class AdvancedManyToManyObjectRelation extends ManyToManyObjectRelation
         $objects = [];
 
         if (is_array($data) && count($data) > 0) {
-            foreach ($data as $object) {
+            foreach ($data as $okey => $object) {
+                $index = $okey + 1;
                 $source = DataObject::getById($object['src_id']);
                 $destination = DataObject::getById($object['dest_id']);
 
@@ -119,7 +125,7 @@ class AdvancedManyToManyObjectRelation extends ManyToManyObjectRelation
                     $ownername = $object['ownername'] ? $object['ownername'] : '';
                     $position = $object['position'] ? $object['position'] : '0';
 
-                    $metaData->load($source, $destination, $this->getName(), $ownertype, $ownername, $position);
+                    $metaData->load($source, $destination, $this->getName(), $ownertype, $ownername, $position, $index);
                     $objects[] = $metaData;
                 }
             }
@@ -639,10 +645,11 @@ class AdvancedManyToManyObjectRelation extends ManyToManyObjectRelation
                 $objectConcrete = $object;
             }
 
-            foreach ($objectsMetadata as $meta) {
+            foreach ($objectsMetadata as $mkey => $meta) {
+                $index = $mkey + 1;
                 $ownerName = isset($relation['ownername']) ? $relation['ownername'] : null;
                 $ownerType = isset($relation['ownertype']) ? $relation['ownertype'] : null;
-                $meta->save($objectConcrete, $ownerType, $ownerName, $position);
+                $meta->save($objectConcrete, $ownerType, $ownerName, $position, $index);
             }
         }
 
@@ -1131,6 +1138,22 @@ class AdvancedManyToManyObjectRelation extends ManyToManyObjectRelation
         }
 
         return $data;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAllowMultipleAssignments()
+    {
+        return $this->allowMultipleAssignments;
+    }
+
+    /**
+     * @param bool $allowMultipleAssignments
+     */
+    public function setAllowMultipleAssignments($allowMultipleAssignments)
+    {
+        $this->allowMultipleAssignments = $allowMultipleAssignments;
     }
 
     /**
