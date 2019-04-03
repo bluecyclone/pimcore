@@ -52,6 +52,11 @@ class AdvancedManyToManyRelation extends ManyToManyRelation
     public $optimizedAdminLoading = false;
 
     /**
+     * @var bool
+     */
+    public $allowMultipleAssignments;
+
+    /**
      * @inheritdoc
      */
     public function prepareDataForPersistence($data, $object = null, $params = [])
@@ -140,6 +145,7 @@ class AdvancedManyToManyRelation extends ManyToManyRelation
                     $ownertype = $element['ownertype'] ? $element['ownertype'] : '';
                     $ownername = $element['ownername'] ? $element['ownername'] : '';
                     $position = $element['position'] ? $element['position'] : '0';
+                    $index = $element['index'] ? $element['index'] : '0';
 
                     $metaData->load(
                         $source,
@@ -148,6 +154,7 @@ class AdvancedManyToManyRelation extends ManyToManyRelation
                         $ownertype,
                         $ownername,
                         $position,
+                        $index,
                         $destinationType
                     );
                     $objects[] = $metaData;
@@ -750,10 +757,11 @@ class AdvancedManyToManyRelation extends ManyToManyRelation
                 $objectConcrete = $object;
             }
 
-            foreach ($multihrefMetadata as $meta) {
+            foreach ($multihrefMetadata as $mkey => $meta) {
+                $index = $mkey + 1;
                 $ownerName = isset($relation['ownername']) ? $relation['ownername'] : null;
                 $ownerType = isset($relation['ownertype']) ? $relation['ownertype'] : null;
-                $meta->save($objectConcrete, $ownerType, $ownerName, $position);
+                $meta->save($objectConcrete, $ownerType, $ownerName, $position, $index);
             }
         }
 
@@ -1191,5 +1199,21 @@ class AdvancedManyToManyRelation extends ManyToManyRelation
     public function setOptimizedAdminLoading($optimizedAdminLoading)
     {
         $this->optimizedAdminLoading = $optimizedAdminLoading;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAllowMultipleAssignments()
+    {
+        return $this->allowMultipleAssignments;
+    }
+
+    /**
+     * @param bool $allowMultipleAssignments
+     */
+    public function setAllowMultipleAssignments($allowMultipleAssignments)
+    {
+        $this->allowMultipleAssignments = $allowMultipleAssignments;
     }
 }
