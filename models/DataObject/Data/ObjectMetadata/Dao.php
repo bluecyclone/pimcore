@@ -81,6 +81,7 @@ class Dao extends Model\Dao\AbstractDao
      * @return null|Model\Dao\\Pimcore\Model\DataObject\AbstractObject
      */
     public function load(DataObject\Concrete $source, $destinationId, $fieldname, $ownertype, $ownername, $position, $index)
+
     {
         $typeQuery = " AND (type = 'object' or type = '')";
 
