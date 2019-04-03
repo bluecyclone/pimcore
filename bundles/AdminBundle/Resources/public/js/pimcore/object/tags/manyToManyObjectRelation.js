@@ -797,7 +797,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
             this.getContext(),
             pimcore.helpers.requestNicePathDataGridDecorator.bind(this, this.component.getView()),
             pimcore.helpers.getNicePathHandlerStore.bind(this, this.store, {
-                idProperty: this.idProperty,
+                idProperty:  "id",
                 pathProperty: this.pathProperty
             }, this.component.getView())
         );
